@@ -1,0 +1,14 @@
+langchain
+rank_bm25
+pypdf
+chromadb
+langchain-community
+pytesseract
+google-colab
+SpeechRecognition
+pyaudio
+gtts
+pydub
+flask
+flask-sqlalchemy
+unstructured[pdf]
