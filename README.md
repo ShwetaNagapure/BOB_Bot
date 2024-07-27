@@ -32,3 +32,5 @@ In today's complex financial landscape, individuals struggle to access personali
 The Financial Advisory Assistant Bot aims to address this gap by delivering swift, precise, and context-aware financial advice using advanced AI technologies. Leveraging Retrieval-Augmented Generation (RAG) and Generative AI, this bot integrates real-time data from financial news and banking websites, stored in a MySQL relational database, to ensure up-to-date and accurate responses.
 
 ---
+### 5. Link Of Demo Video
+<a href="https://drive.google.com/file/d/1QrOYZHXkf89P9-H1fWSU1pBT2wkTySgo/view?usp=drive_link>Click Here</a>
