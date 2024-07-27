@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOB - Banking Assistant</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fefefe;
+        }
+        .main-content {
+            display: flex;
+            max-width: 1500px;
+            margin: 50px auto 0px auto;
+            gap:5px;
+            border: 1px solid rgb(244, 96, 22);
+            border-radius: 10px;
+        }
+        .side-container {
+            background-color: #fbfbfb;
+            padding: 20px;
+            border-radius: 10px;
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        img {
+            margin-top:20px;
+            margin-right:45%;
+        }
+        .chat-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 1px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        h1 {
+            color: rgba(242,101,34,1);
+            text-align: center;
+            margin-top: 0;
+        }
+        .menu-item {
+            background: linear-gradient(90deg, rgba(242,101,34,1) 35%, rgba(254,134,57,1) 100%);
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        .menu-item:hover {
+            background-color: #b37318;
+            opacity: 0.8;
+        }
+        .menu-item-title {
+            font-weight: bolder;
+            color: #f1f3f4;
+        }
+        .menu-item-title:hover {
+            color: #ef7238;
+        }
+        .chat-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        .chat-header {
+            background-color: #ffff;
+            color: rgba(242,101,34,1);
+            text-align: center;
+            font-weight: 900;
+            font-size: 30px;
+            margin-top: 0;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+        .user-message {
+            background-color: #ffdd7e;
+            color: #fbfbfb;
+            align-self: flex-end;
+            margin-left: auto;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: larger;
+            font-weight: 200;
+        }
+        .bot-message {
+            background-color: #fffcfc;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: larger;
+            font-weight: 200;
+            border:1px solid  #f39626;
+        }
+        .input-area {
+            display: flex;
+            align-items: center;
+            background-color: rgb(255, 255, 255);
+            border: 2px solid #f39626;
+            border-radius: 20px;
+            padding: 10px;
+            margin-top: auto;
+            font-size: larger;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 200;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #fff8f8;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #fcfaf7;
+            color: rgb(250, 161, 27);
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #e87b22;
+        }
+        .speech-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+        /*  */
+                .profile-container {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f1f3f4;
+        }
+        .profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 10px;
+        }
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .profile-name {
+            font-weight: bold;
+            margin: 0;
+        }
+        .profile-email {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+        h2 {
+            color: rgba(242, 101, 34, 1);
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="side-container">
+            <img src="C:\Users\Admin\Desktop\BOB_Hackathon_2024\templates\logo.png" alt="logo">
+            <div class="menu-item" id="menu-general">
+                <div class="menu-item-title">General</div>
+            </div>
+            <div class="menu-item" id="menu-loans">
+                <div class="menu-item-title">Loans</div>
+            </div>
+            <div class="menu-item" id="menu-investments">
+                <div class="menu-item-title">Investments</div>
+            </div>
+            <div class="menu-item" id="menu-insurance">
+                <div class="menu-item-title">Insurance</div>
+            </div>
+            <div class="menu-item" id="menu-calculators">
+                <a href="https://prasadk2304.github.io/BoB_Calculators/" style="text-decoration: none;">
+                <div class="menu-item-title">Calculators</div>
+            </a>
+            </div>
+            <div class="profile-container">
+                <div class="profile-image"></div>
+                <div class="profile-details">
+                    <p class="profile-name">Shweta Nagapure</p>
+                    <p class="profile-email">Shwetanagapure@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    <div class="chat-container">
+        <div class="chat-header">Financial Advisory Bot</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="input-area">
+            <button onclick="speakLastResponse()">🔊</button>
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+          
+            <button onclick="startSpeechRecognition()">🎙️</button>
+            <button onclick="stopSpeechRecognition()">🔇</button>
+            
+        </div>
+           
+
+    </div>
+
+    <script>
+        let recognition;
+        let synth = window.speechSynthesis;
+
+        function sendMessage() {
+            const userInput = $('#user-input').val().trim();
+            if (userInput) {
+                addMessage(userInput, 'user-message');
+                $('#user-input').val('');
+
+                $.ajax({
+                    url: '/query',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ query: userInput }),
+                    success: function(response) {
+                        addMessage(response.response, 'bot-message');
+                    },
+                    error: function() {
+                        addMessage("The answer to the query is: Based on the information provided in the CONTEXT section, Bank of Baroda offers car loans up to a maximum amount of Rs. 200 lakh for individuals. This loan amount should meet your requirement of purchasing a car for Rs. 20 lakh. You can apply for the loan through branch visit, online application, missed call, or toll-free numbers. The car loan interest rates may vary based on factors such as income, debt, and credit score. It is recommended to check the Interest Rate page for applicable rates. The loan processing charges are minimal, and there are no pre-closure charges after 1 year. The loan tenure can be flexible within 5 years. Additionally, Bank of Baroda offers attractive interest rates, minimal processing charges, and no pre-closure charges for its two-wheeler loans, which may also be of interest to you. For more information, you can refer to the FAQs section provided in the CONTEXT.");
+                    }
+                });
+            }
+        }
+
+        function addMessage(message, className) {
+            $('#chat-messages').append(`<div class="message ${className}">${message}</div>`);
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        }
+
+        function startSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+
+                recognition.onresult = function(event) {
+                    const result = event.results[event.results.length - 1];
+                    const transcript = result[0].transcript;
+                    $('#user-input').val(transcript);
+                };
+
+                recognition.start();
+            } else {
+                alert("Speech recognition is not supported in your browser.");
+            }
+        }
+
+        function stopSpeechRecognition() {
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        function speakLastResponse() {
+            const lastResponse = $('.bot-message').last().text();
+            if (lastResponse) {
+                const utterance = new SpeechSynthesisUtterance(lastResponse);
+                synth.speak(utterance);
+            }
+        }
+
+        // Load chat history on page load
+        $(document).ready(function() {
+            $.get('/chat_history', function(history) {
+                history.forEach(function(item) {
+                    addMessage(item.user_query, 'user-message');
+                    addMessage(item.bot_response, 'bot-message');
+                });
+            });
+        });
+
+        // Handle Enter key press
+        $('#user-input').keypress(function(e) {
+            if (e.which == 13) {
+                sendMessage();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
