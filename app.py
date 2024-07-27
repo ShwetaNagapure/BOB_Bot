@@ -1,4 +1,6 @@
+# app.py
 from flask import Flask, render_template, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
@@ -11,12 +13,12 @@ from langchain.retrievers import BM25Retriever, EnsembleRetriever
 import os
 from threading import Thread
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder="/content/sample_data/templates")
 
-# This is a simplified version, you'll need to adapt it to your specific setup
+# Initialize your bot components here (outside of any route)
 def initialize_bot():
     # Load and process the PDF
-    file_path = "general.pdf"
+    file_path = "FILE"  ##Document File
     data_file = UnstructuredPDFLoader(file_path)
     docs = data_file.load()
 
@@ -25,7 +27,7 @@ def initialize_bot():
     chunks = splitter.split_documents(docs)
 
     # Initialize embeddings
-    HF_TOKEN = "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"
+    HF_TOKEN = userdata.get('HUGGINGFACEHUB_API_TOKEN')
     embeddings = HuggingFaceInferenceAPIEmbeddings(
         api_key=HF_TOKEN, model_name="BAAI/bge-base-en-v1.5"
     )
@@ -57,9 +59,8 @@ def initialize_bot():
 
     QUERY: {query} </s>
 
-    INSTRUCTIONS: - Use only the information provided in the CONTEXT section to answer the QUERY.
-                  - Do not provide information or answers outside of the given CONTEXT.
-                  - Provide only the answer to the query without additional information.
+    INSTRUCTIONS: - Use only the information provided in the CONTEXT section to answer the QUERY. - Do not provide information or answers outside of the given CONTEXT.
+
     ANSWER: The answer to the query is:
     """
     prompt = ChatPromptTemplate.from_template(template)
@@ -95,5 +96,14 @@ def extract_answer(response):
         return parts[1].strip()
     return response.strip()
 
-if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+def run_flask(port):
+    app.run(port=port, debug=True, use_reloader=False)
+
+# Start the Flask app in a separate thread
+flask_thread = Thread(target=run_flask, args=(8000,))
+flask_thread.start()
+
+# Use ngrok to create a public URL
+from google.colab.output import eval_js
+print(eval_js("google.colab.kernel.proxyPort(8000)"))
+
